@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.11) # FetchContent is available in 3.11+
-project(example)
+project(mihoyo)
 
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
+set(MIHOYO_TEST_ROOT ${PROJECT_SOURCE_DIR})
 
 # Dependencies
 find_package(raylib 4.2.0 QUIET) # QUIET or REQUIRED
@@ -22,10 +23,13 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
   endif()
 endif()
 
+add_subdirectory(gridmap)
+
 # Our Project
 add_executable(${PROJECT_NAME} core_basic_window.c)
 #set(raylib_VERBOSE 1)
-target_link_libraries(${PROJECT_NAME} raylib)
+target_link_libraries(${PROJECT_NAME} raylib gridmap)
+target_include_directories(${PROJECT_NAME} PRIVATE ${MIHOYO_TEST_ROOT})
 
 # Web Configurations
 if (${PLATFORM} STREQUAL "Web")
@@ -41,4 +45,4 @@ if (APPLE)
 endif()
 
 add_executable(test_node tutorial.cc)
-target_link_libraries(test_node raylib)
+target_link_libraries(test_node raylib gridmap)
