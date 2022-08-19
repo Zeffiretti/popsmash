@@ -1,10 +1,9 @@
 #ifndef GRIDMAP_GRIDMAP
 #define GRIDMAP_GRIDMAP
 
-// #include "raylib.h"
-
 #include "gridmap/circle.h"
 #include "gridmap/grid.h"
+#include "mihoyo_macros.h"
 
 #include <list>
 #include <map>

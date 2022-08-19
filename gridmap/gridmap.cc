@@ -1,5 +1,7 @@
 #include "gridmap/gridmap.h"
+
 #include "gridmap/circle.h"
+#include "mihoyo_macros.h"
 
 #include <cmath>
 #include <iostream>

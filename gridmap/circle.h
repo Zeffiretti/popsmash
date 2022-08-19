@@ -1,8 +1,10 @@
 #ifndef GRIDMAP_CIRCLE
 #define GRIDMAP_CIRCLE
 
-#include <iostream>
+#include "mihoyo_macros.h"
 #include "raylib.h"
+
+#include <iostream>
 
 class Circle {
  public:

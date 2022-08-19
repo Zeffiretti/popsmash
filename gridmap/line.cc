@@ -1,5 +1,7 @@
 #include "gridmap/line.h"
 
+#include "mihoyo_macros.h"
+
 #include <iostream>
 #include <utility>
 #include <vector>

@@ -1,4 +1,6 @@
 #include "gridmap/grid.h"
+#include "mihoyo_macros.h"
+
 #include <vector>
 
 Grid::Grid() { circles.clear(); }

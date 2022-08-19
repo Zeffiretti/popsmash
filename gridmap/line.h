@@ -1,6 +1,8 @@
 #ifndef GRIDMAP_LINE
 #define GRIDMAP_LINE
 
+#include "mihoyo_macros.h"
+
 #include <cmath>
 #include <vector>
 

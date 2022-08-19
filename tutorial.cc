@@ -11,6 +11,7 @@
 #include "gridmap/gridmap.h"
 #include "gridmap/line.h"
 #include "math/geometry.h"
+#include "mihoyo_macros.h"
 
 const int kWindowWidth = 1000;
 const int kWindowHeight = 1000;

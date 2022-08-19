@@ -1,4 +1,7 @@
 #include "math/geometry.h"
+
+#include "mihoyo_macros.h"
+
 #include <math.h>
 #include <vector>
 

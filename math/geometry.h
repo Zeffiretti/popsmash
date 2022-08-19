@@ -1,12 +1,13 @@
 #ifndef MATH_GEOMETRY
 #define MATH_GEOMETRY
 
-#include <cmath>
-#include <vector>
-
 #include "gridmap/circle.h"
 #include "gridmap/gridmap.h"
 #include "gridmap/line.h"
+#include "mihoyo_macros.h"
+
+#include <cmath>
+#include <vector>
 
 namespace geometry {
 

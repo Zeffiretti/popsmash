@@ -2,6 +2,7 @@
 #define GRIDMAP_GRID
 
 #include "gridmap/circle.h"
+#include "mihoyo_macros.h"
 
 #include <vector>
 

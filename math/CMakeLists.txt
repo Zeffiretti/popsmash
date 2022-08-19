@@ -1,6 +1,6 @@
 project(mihoyo_math)
 
-add_library(mihoyo_math SHARED 
+add_library(mihoyo_math STATIC 
   geometry.h
   geometry.cc
 )

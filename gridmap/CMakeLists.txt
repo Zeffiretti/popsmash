@@ -1,4 +1,4 @@
-add_library(gridmap
+add_library(gridmap STATIC
   circle.h
   line.h
   line.cc
