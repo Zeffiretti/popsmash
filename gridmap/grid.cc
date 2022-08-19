@@ -1,5 +1,8 @@
 #include "gridmap/grid.h"
+#include <vector>
 
 Grid::Grid() { circles.clear(); }
 
-void Grid::AddCircle(Circle circle) { circles.push_back(circle); }
+void Grid::addCircle(int circle_index) { circles.push_back(circle_index); }
+
+std::vector<int> Grid::getCircles() const { return circles; }

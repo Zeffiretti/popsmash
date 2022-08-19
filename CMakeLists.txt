@@ -5,6 +5,7 @@ project(mihoyo)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
 set(MIHOYO_TEST_ROOT ${PROJECT_SOURCE_DIR})
+include_directories(${MIHOYO_TEST_ROOT})
 
 # Dependencies
 find_package(raylib 4.2.0 QUIET) # QUIET or REQUIRED
@@ -23,6 +24,7 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
   endif()
 endif()
 
+add_subdirectory(math)
 add_subdirectory(gridmap)
 
 # Our Project
@@ -45,4 +47,4 @@ if (APPLE)
 endif()
 
 add_executable(test_node tutorial.cc)
-target_link_libraries(test_node raylib gridmap)
+target_link_libraries(test_node raylib gridmap mihoyo_math)

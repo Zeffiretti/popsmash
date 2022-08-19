@@ -15,9 +15,11 @@ class GridMap {
   GridMap() = default;
   GridMap(int w, int h);
   GridMap(int w, int h, int r);
-  void AddCircleToMap(int x, int y);
-  void AddCircleToMap(int x, int y, int r);
-  std::list<Circle> GetActiveCircles() const;
+  void addCircleToMap(int x, int y);
+  void addCircleToMap(int x, int y, int r);
+  std::vector<Circle> getActiveCircles() const;
+  Grid* getGrid(int x, int y) const;
+  int getCircleIterator(int key);
 
  private:
   int width;
@@ -25,8 +27,11 @@ class GridMap {
   int circle_radius;
   int num_circle;
   std::vector<std::vector<Grid*>> grids;
-  std::list<Circle> active_circles;
-  std::map<int, std::list<Circle*>::iterator> circle_indexs;
+  std::vector<Circle> active_circles;
+  std::map<int, int> circle_indexs;
+  int index = 0;
+
+  void InitGrids();
 };
 
 #endif /* GRIDMAP_GRIDMAP */

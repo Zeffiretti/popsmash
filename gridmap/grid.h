@@ -8,10 +8,11 @@
 class Grid {
  public:
   Grid();
-  void AddCircle(Circle circle);
+  void addCircle(int circle_index);
+  std::vector<int> getCircles() const;
 
  private:
-  std::vector<Circle> circles;
+  std::vector<int> circles;
 };
 
 #endif /* GRIDMAP_GRID */
