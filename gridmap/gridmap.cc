@@ -11,6 +11,7 @@
 #include <cmath>
 #include <iostream>
 #include <list>
+#include <mutex>
 #include <thread>
 #include <utility>
 #include <vector>
@@ -30,64 +31,61 @@ GridMap::GridMap(int w, int h, int r) {
 }
 
 void GridMap::update() {
-  // data_thread.detach();
-  render();
+  while (!WindowShouldClose()) {
+    render();
+  }
+  CloseWindow();
 }
 
 void GridMap::logic() {
-  // while (true) {
-  // if (button_clicked) {
-  button_clicked = false;
-  // line.calculatePath(width, height);
-  std::vector<std::pair<float, float>> line_path = line.getPath();
-  for (std::pair<float, float>& point : line_path) {
-    int x = std::roundf(point.first);
-    int y = std::roundf(point.second);
-    if (x < 0 || x >= width || y < 0 || y >= height) {
-      continue;
-    }
-    if (grids[x][y]->getCircles().empty()) {
-      continue;
-    }
-    std::vector<int> circles = grids[x][y]->getCircles();
-    for (int& circle_key : circles) {
-      if (((*active_circles)[circle_key].isActive()) &&
-          geometry::distance((*active_circles)[circle_key], line) < (*active_circles)[circle_key].Radius()) {
-        (*active_circles)[circle_key].setColor(RED);
-        (*active_circles)[circle_key].eliminate();
+  while (true) {
+    if (button_clicked) {
+      std::lock_guard<std::mutex> lock(logic_mutex);
+      std::vector<std::pair<float, float>> line_path = line.getPath();
+      for (std::pair<float, float>& point : line_path) {
+        int x = std::roundf(point.first);
+        int y = std::roundf(point.second);
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+          continue;
+        }
+        if (grids[x][y]->getCircles().empty()) {
+          continue;
+        }
+        std::vector<int> circles = grids[x][y]->getCircles();
+        for (int& circle_key : circles) {
+          if (((*active_circles)[circle_key].isActive()) &&  // the circle has not been eliminated yet
+              geometry::distance((*active_circles)[circle_key], line) < (*active_circles)[circle_key].Radius()) {
+            (*active_circles)[circle_key].setColor(RED);
+            (*active_circles)[circle_key].eliminate();
+          }
+        }
       }
+      button_clicked = false;
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(500 / frame_rate));
   }
-  // }
-  // std::this_thread::sleep_for(std::chrono::milliseconds(1000 / frame_rate));
-  // }
 }
 
 void GridMap::render() {
-  while (!WindowShouldClose()) {
-    // if left button clicked
-    int x = GetMouseX();
-    int y = GetMouseY();
-    line.setStartPoint(x, y);
-    line.calculatePath(width, height);
-    if (!button_clicked && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-      button_clicked = true;
-      logic();
-    }
-    BeginDrawing();
-    ClearBackground(WHITE);
-    for (auto circle : *active_circles) {
-      // if (circle.isActive()) {
-      DrawCircle(circle.X(), circle.Y(), circle.Radius(), circle.getColor());
-      // }
-    }
-    // draw a line with the mouse position
-    // DrawLine(GetMouseX(), GetMouseY(), GetMouseX() + 100, GetMouseY() + 100, BLACK);
-    auto line_end_points = line.getEndPoint();
-    DrawLine(line_end_points[0], line_end_points[1], line_end_points[2], line_end_points[3], BLACK);
-    EndDrawing();
+  int x = GetMouseX();
+  int y = GetMouseY();
+  line.setStartPoint(x, y);
+  line.calculatePath(width, height);
+  if (!button_clicked && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    button_clicked = true;
   }
-  CloseWindow();
+  BeginDrawing();
+  ClearBackground(WHITE);
+  for (auto circle : *active_circles) {
+    // if (circle.isActive()) {
+    DrawCircle(circle.X(), circle.Y(), circle.Radius(), circle.getColor());
+    // }
+  }
+  // draw a line with the mouse position
+  // DrawLine(GetMouseX(), GetMouseY(), GetMouseX() + 100, GetMouseY() + 100, BLACK);
+  auto line_end_points = line.getEndPoint();
+  DrawLine(line_end_points[0], line_end_points[1], line_end_points[2], line_end_points[3], BLACK);
+  EndDrawing();
 }
 
 void GridMap::addCircleToMap(int x, int y) { addCircleToMap(x, y, circle_radius); }

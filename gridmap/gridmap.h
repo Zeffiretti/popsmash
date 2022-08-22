@@ -7,6 +7,7 @@
 
 #include <list>
 #include <map>
+#include <mutex>
 #include <thread>
 #include <vector>
 
@@ -36,11 +37,12 @@ class GridMap {
   int index = 0;
 
   // parameters for rendering
-  const int frame_rate = 60;
-  bool button_clicked = true;
+  const int frame_rate = 30;
+  bool button_clicked = false;
 
   // threads
   std::thread logic_thread;
+  std::mutex logic_mutex;
 
   void initGrids();
   void initWindow();
