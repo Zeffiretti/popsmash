@@ -3,6 +3,7 @@
 
 #include "gridmap/circle.h"
 #include "gridmap/grid.h"
+#include "gridmap/line.h"
 #include "mihoyo_macros.h"
 
 #include <bits/types/time_t.h>
@@ -37,6 +38,7 @@ class GridMap {
   int num_circle;
   std::vector<std::vector<Grid*>> grids;
   std::vector<Circle>* active_circles;
+  Line line;
   std::map<int, int> circle_indexs;
   int index = 0;
 

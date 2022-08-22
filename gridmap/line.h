@@ -20,6 +20,7 @@ class Line {
   std::vector<std::pair<float, float>> getPath() const;
   float getAlpha() const;
   void setStartPoint(int x, int y);
+  void setAlpha(float alpha);
 
  private:
   int start_x;

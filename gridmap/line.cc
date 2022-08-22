@@ -50,6 +50,7 @@ void Line::calculatePath(int width, int height, int x_margin, int y_margin) {
 }
 
 std::pair<int, int> Line::getStartPoint() const { return std::make_pair(start_x, start_y); }
+
 std::vector<int> Line::getEndianPoint() const { return {start_x, start_y, end_x, end_y}; }
 
 std::vector<std::pair<float, float>> Line::getPath() const { return path; }
@@ -60,3 +61,5 @@ void Line::setStartPoint(int x, int y) {
   start_x = x;
   start_y = y;
 }
+
+void Line::setAlpha(float alpha) { this->alpha = alpha; }

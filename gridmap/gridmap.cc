@@ -17,8 +17,6 @@
 #include <utility>
 #include <vector>
 
-extern Line line;
-
 GridMap::GridMap(int w, int h) : GridMap(w, h, 5) {}
 
 GridMap::GridMap(int w, int h, int r) {
@@ -73,10 +71,20 @@ void GridMap::logic() {
 void GridMap::render() {
   int x = GetMouseX();
   int y = GetMouseY();
-  line.setStartPoint(x, y);
-  line.calculatePath(width, height, x_margin, y_margin);
-  if (!line_changed && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-    line_changed = true;
+  if (mouse_clicked) {
+    std::pair<int, int> point = line.getStartPoint();
+    double alpha = geometry::angle(point.first, point.second, x, y);
+    line.setAlpha(alpha);
+    line.calculatePath(width, height, x_margin, y_margin);
+    if (!line_changed && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+      line_changed = true;
+      mouse_clicked = false;
+    }
+  } else {
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+      mouse_clicked = true;
+      line.setStartPoint(x, y);
+    }
   }
   BeginDrawing();
   ClearBackground(WHITE);
@@ -85,7 +93,11 @@ void GridMap::render() {
     DrawCircle(circle.X(), circle.Y(), circle.Radius(), circle.getColor());
   }
   auto line_end_points = line.getEndianPoint();
-  DrawLine(line_end_points[0], line_end_points[1], line_end_points[2], line_end_points[3], BLACK);
+  if (mouse_clicked) {
+    DrawLine(line_end_points[0], line_end_points[1], line_end_points[2], line_end_points[3], YELLOW);
+  }
+  DrawCircle(x, y, 5, BLACK);
+
   EndDrawing();
 }
 
