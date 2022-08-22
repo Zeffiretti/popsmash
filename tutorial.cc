@@ -71,8 +71,6 @@ int main(int argc, char** argv) {
   //   }
   // }
   gridmap.update();
-  while (!WindowShouldClose()) {
-  }
   // std::thread render_thread(&GridMap::update, &gridmap);
   // render_thread.join();
   // while (true) {

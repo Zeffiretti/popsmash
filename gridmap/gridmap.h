@@ -5,6 +5,8 @@
 #include "gridmap/grid.h"
 #include "mihoyo_macros.h"
 
+#include <bits/types/time_t.h>
+#include <time.h>
 #include <list>
 #include <map>
 #include <mutex>
@@ -29,6 +31,8 @@ class GridMap {
  private:
   int width;
   int height;
+  int x_margin = 100;
+  int y_margin = 100;
   int circle_radius;
   int num_circle;
   std::vector<std::vector<Grid*>> grids;
@@ -37,8 +41,9 @@ class GridMap {
   int index = 0;
 
   // parameters for rendering
-  const int frame_rate = 30;
-  bool button_clicked = false;
+  const int frame_rate = 50;
+  bool line_changed = false;
+  bool mouse_clicked = false;
 
   // threads
   std::thread logic_thread;

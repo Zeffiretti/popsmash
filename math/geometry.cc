@@ -10,7 +10,7 @@ namespace geometry {
 float distance(int x1, int y1, int x2, int y2) { return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)); }
 
 float distance(const Circle& circle, const Line& line) {
-  std::vector<int> path = line.getEndPoint();
+  std::vector<int> path = line.getEndianPoint();
   float alpha = line.getAlpha();
   // line: y = ax + b
   float a = tan(alpha);

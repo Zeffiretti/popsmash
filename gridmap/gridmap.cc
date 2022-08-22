@@ -1,4 +1,5 @@
 #include "gridmap/gridmap.h"
+#include <bits/types/time_t.h>
 
 #include "gridmap/circle.h"
 #include "gridmap/grid.h"
@@ -28,23 +29,26 @@ GridMap::GridMap(int w, int h, int r) {
   initGrids();
   initWindow();
   logic_thread = std::thread(&GridMap::logic, this);
+  std::this_thread::sleep_for(std::chrono::milliseconds(1000 / frame_rate));
 }
 
 void GridMap::update() {
   while (!WindowShouldClose()) {
     render();
+    std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   }
   CloseWindow();
 }
 
 void GridMap::logic() {
   while (true) {
-    if (button_clicked) {
+    if (line_changed) {
       std::lock_guard<std::mutex> lock(logic_mutex);
       std::vector<std::pair<float, float>> line_path = line.getPath();
+      std::cout << "line_path size: " << line_path.size() << std::endl;
       for (std::pair<float, float>& point : line_path) {
-        int x = std::roundf(point.first);
-        int y = std::roundf(point.second);
+        int x = std::roundf(point.first) - x_margin;
+        int y = std::roundf(point.second) - y_margin;
         if (x < 0 || x >= width || y < 0 || y >= height) {
           continue;
         }
@@ -60,7 +64,7 @@ void GridMap::logic() {
           }
         }
       }
-      button_clicked = false;
+      line_changed = false;
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(500 / frame_rate));
   }
@@ -70,20 +74,17 @@ void GridMap::render() {
   int x = GetMouseX();
   int y = GetMouseY();
   line.setStartPoint(x, y);
-  line.calculatePath(width, height);
-  if (!button_clicked && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-    button_clicked = true;
+  line.calculatePath(width, height, x_margin, y_margin);
+  if (!line_changed && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    line_changed = true;
   }
   BeginDrawing();
   ClearBackground(WHITE);
+  DrawRectangle(x_margin, y_margin, width, height, BLACK);
   for (auto circle : *active_circles) {
-    // if (circle.isActive()) {
     DrawCircle(circle.X(), circle.Y(), circle.Radius(), circle.getColor());
-    // }
   }
-  // draw a line with the mouse position
-  // DrawLine(GetMouseX(), GetMouseY(), GetMouseX() + 100, GetMouseY() + 100, BLACK);
-  auto line_end_points = line.getEndPoint();
+  auto line_end_points = line.getEndianPoint();
   DrawLine(line_end_points[0], line_end_points[1], line_end_points[2], line_end_points[3], BLACK);
   EndDrawing();
 }
@@ -91,7 +92,7 @@ void GridMap::render() {
 void GridMap::addCircleToMap(int x, int y) { addCircleToMap(x, y, circle_radius); }
 
 void GridMap::addCircleToMap(int x, int y, int r) {
-  Circle circle = Circle(x, y, r);
+  Circle circle = Circle(x + x_margin, y + y_margin, r);
   active_circles->push_back(circle);
   // link the grids the circle covers to the circle
   for (int i = std::max(0, x - r); i <= std::min(height - 1, x + r); i++) {
@@ -121,7 +122,7 @@ int GridMap::getCircleIterator(int key) {
 }
 
 void GridMap::initWindow() {
-  InitWindow(width, height, "PopSmash");
+  InitWindow(2 * x_margin + width, 2 * y_margin + height, "PopSmash");
   SetTraceLogLevel(LOG_WARNING);
   SetTargetFPS(frame_rate);
 }
@@ -136,4 +137,4 @@ void GridMap::initGrids() {
   }
 }
 
-GridMap::~GridMap() {}
+GridMap::~GridMap() = default;

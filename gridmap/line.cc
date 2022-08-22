@@ -2,6 +2,7 @@
 
 #include "mihoyo_macros.h"
 
+#include <cmath>
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -25,12 +26,22 @@ Line::Line(int x, int y, float alpha) {
   this->alpha = alpha;
 }
 
-void Line::calculatePath(int width, int height) {
+void Line::calculatePath(int width, int height) { calculatePath(width, height, 0, 0); }
+
+void Line::calculatePath(int width, int height, int x_margin, int y_margin) {
+  path_set.clear();
+  path.clear();
   float x = start_x;
   float y = start_y;
   float dt = 0.5;
-  while (x >= 0 && x < width && y >= 0 && y < height) {
-    path.push_back(std::make_pair(x, y));
+  while (x >= 0 && x < width + 2 * x_margin && y >= 0 && y < height + 2 * y_margin) {
+    int ix = std::round(x);
+    int iy = std::round(y);
+    int idx = ix + iy * 1000;
+    if (path_set.find(idx) == path_set.end()) {
+      path_set.insert(idx);
+      path.push_back(std::make_pair(x, y));
+    }
     x += dt * cos(alpha);
     y += dt * sin(alpha);
   }
@@ -38,7 +49,8 @@ void Line::calculatePath(int width, int height) {
   end_y = static_cast<int>(y - dt * sin(alpha));
 }
 
-std::vector<int> Line::getEndPoint() const { return {start_x, start_y, end_x, end_y}; }
+std::pair<int, int> Line::getStartPoint() const { return std::make_pair(start_x, start_y); }
+std::vector<int> Line::getEndianPoint() const { return {start_x, start_y, end_x, end_y}; }
 
 std::vector<std::pair<float, float>> Line::getPath() const { return path; }
 
