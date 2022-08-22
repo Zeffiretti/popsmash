@@ -25,11 +25,11 @@ Line::Line(int x, int y, float alpha) {
   this->alpha = alpha;
 }
 
-void Line::calculatePath(int width, int heigth) {
+void Line::calculatePath(int width, int height) {
   float x = start_x;
   float y = start_y;
   float dt = 0.5;
-  while (x >= 0 && x < width && y >= 0 && y < heigth) {
+  while (x >= 0 && x < width && y >= 0 && y < height) {
     path.push_back(std::make_pair(x, y));
     x += dt * cos(alpha);
     y += dt * sin(alpha);
@@ -43,3 +43,8 @@ std::vector<int> Line::getEndPoint() const { return {start_x, start_y, end_x, en
 std::vector<std::pair<float, float>> Line::getPath() const { return path; }
 
 float Line::getAlpha() const { return alpha; }
+
+void Line::setStartPoint(int x, int y) {
+  start_x = x;
+  start_y = y;
+}
