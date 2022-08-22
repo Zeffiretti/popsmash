@@ -1,9 +1,11 @@
 #include "gridmap/gridmap.h"
+#include <exception>
 
 #include "math/geometry.h"
 #include "mihoyo_macros.h"
-
+namespace raylib {
 #include "raylib.h"
+}
 
 #include <chrono>
 #include <cmath>
@@ -28,13 +30,17 @@ GridMap::GridMap(int w, int h, int r) {
 }
 
 void GridMap::update() {
-  while (!WindowShouldClose()) {
+  while (!raylib::WindowShouldClose()) {
     render();
   }
+  terminate = true;
+  // terminate logic thread
+  logic_thread.join();
+  raylib::CloseWindow();
 }
 
 void GridMap::logic() {
-  while (true) {
+  while (!terminate) {
     if (line_changed) {
       std::lock_guard<std::mutex> lock(logic_mutex);
       std::vector<std::pair<float, float>> line_path = line.getPath();
@@ -63,37 +69,37 @@ void GridMap::logic() {
 }
 
 void GridMap::render() {
-  int x = GetMouseX();
-  int y = GetMouseY();
+  int x = raylib::GetMouseX();
+  int y = raylib::GetMouseY();
   if (mouse_clicked) {
     std::pair<int, int> point = line.getStartPoint();
     double alpha = geometry::angle(point.first, point.second, x, y);
     line.setAlpha(alpha);
     line.calculatePath(width, height, x_margin, y_margin);
-    if (!line_changed && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    if (!line_changed && raylib::IsMouseButtonPressed(raylib::MOUSE_LEFT_BUTTON)) {
       line_changed = true;
       mouse_clicked = false;
     }
   } else {
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    if (raylib::IsMouseButtonPressed(raylib::MOUSE_LEFT_BUTTON)) {
       mouse_clicked = true;
       line.setStartPoint(x, y);
     }
   }
-  BeginDrawing();
-  ClearBackground(WHITE);
-  DrawRectangle(x_margin, y_margin, width, height, BLACK);
+  raylib::BeginDrawing();
+  raylib::ClearBackground(raylib::WHITE);
+  raylib::DrawRectangle(x_margin, y_margin, width, height, raylib::BLACK);
   for (auto circle : *active_circles) {
-    Color color = circle.isActive() ? GREEN : RED;
-    DrawCircle(circle.X(), circle.Y(), circle.Radius(), color);
+    raylib::Color color = circle.isActive() ? raylib::GREEN : raylib::RED;
+    raylib::DrawCircle(circle.X(), circle.Y(), circle.Radius(), color);
   }
   auto line_end_points = line.getEndianPoint();
   if (mouse_clicked) {
-    DrawLine(line_end_points[0], line_end_points[1], line_end_points[2], line_end_points[3], YELLOW);
+    raylib::DrawLine(line_end_points[0], line_end_points[1], line_end_points[2], line_end_points[3], raylib::YELLOW);
   }
-  DrawCircle(x, y, 5, BLACK);
+  raylib::DrawCircle(x, y, 5, raylib::BLACK);
 
-  EndDrawing();
+  raylib::EndDrawing();
 }
 
 void GridMap::addCircleToMap(int x, int y) { addCircleToMap(x, y, circle_radius); }
@@ -129,9 +135,9 @@ int GridMap::getCircleIterator(int key) {
 }
 
 void GridMap::initWindow() {
-  InitWindow(2 * x_margin + width, 2 * y_margin + height, "PopSmash");
-  SetTraceLogLevel(LOG_WARNING);
-  SetTargetFPS(frame_rate);
+  raylib::InitWindow(2 * x_margin + width, 2 * y_margin + height, "PopSmash");
+  raylib::SetTraceLogLevel(raylib::LOG_WARNING);
+  raylib::SetTargetFPS(frame_rate);
 }
 
 void GridMap::initGrids() {

@@ -49,6 +49,7 @@ class GridMap {
   // threads
   std::thread logic_thread;
   std::mutex logic_mutex;
+  bool terminate = false;
 
   void initGrids();
   void initWindow();
