@@ -6,7 +6,6 @@
 #include "gridmap/line.h"
 #include "mihoyo_macros.h"
 
-#include <bits/types/time_t.h>
 #include <time.h>
 #include <list>
 #include <map>

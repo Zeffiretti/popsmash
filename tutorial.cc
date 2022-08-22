@@ -1,18 +1,13 @@
-#include <stdio.h>
-#include <cmath>
-#include <cstdlib>
-#include <iostream>
-#include <random>
-#include <thread>
-
-#include "raylib.h"
-
 #include "gridmap/circle.h"
 #include "gridmap/grid.h"
 #include "gridmap/gridmap.h"
 #include "gridmap/line.h"
 #include "math/geometry.h"
 #include "mihoyo_macros.h"
+
+#include "raylib.h"
+
+#include <random>
 
 const int kWindowWidth = 1000;
 const int kWindowHeight = 1000;
@@ -30,5 +25,6 @@ int main(int argc, char** argv) {
     gridmap.addCircleToMap(x, y, 5);
   }
   gridmap.update();
-  return 0;
+
+  CloseWindow();
 }

@@ -1,11 +1,8 @@
 #include "gridmap/gridmap.h"
-#include <bits/types/time_t.h>
 
-#include "gridmap/circle.h"
-#include "gridmap/grid.h"
-#include "gridmap/line.h"
 #include "math/geometry.h"
 #include "mihoyo_macros.h"
+
 #include "raylib.h"
 
 #include <chrono>
@@ -33,9 +30,7 @@ GridMap::GridMap(int w, int h, int r) {
 void GridMap::update() {
   while (!WindowShouldClose()) {
     render();
-    std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   }
-  CloseWindow();
 }
 
 void GridMap::logic() {
@@ -57,7 +52,6 @@ void GridMap::logic() {
         for (int& circle_key : circles) {
           if (((*active_circles)[circle_key].isActive()) &&  // the circle has not been eliminated yet
               geometry::distance((*active_circles)[circle_key], line) < (*active_circles)[circle_key].Radius()) {
-            (*active_circles)[circle_key].setColor(RED);
             (*active_circles)[circle_key].eliminate();
           }
         }
@@ -90,7 +84,8 @@ void GridMap::render() {
   ClearBackground(WHITE);
   DrawRectangle(x_margin, y_margin, width, height, BLACK);
   for (auto circle : *active_circles) {
-    DrawCircle(circle.X(), circle.Y(), circle.Radius(), circle.getColor());
+    Color color = circle.isActive() ? GREEN : RED;
+    DrawCircle(circle.X(), circle.Y(), circle.Radius(), color);
   }
   auto line_end_points = line.getEndianPoint();
   if (mouse_clicked) {
