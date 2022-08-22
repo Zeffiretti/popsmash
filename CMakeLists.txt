@@ -28,9 +28,9 @@ add_subdirectory(math)
 add_subdirectory(gridmap)
 
 # Our Project
-add_executable(${PROJECT_NAME} core_basic_window.c)
+add_executable(${PROJECT_NAME} main.cc)
 #set(raylib_VERBOSE 1)
-target_link_libraries(${PROJECT_NAME} raylib gridmap)
+target_link_libraries(${PROJECT_NAME} raylib gridmap mihoyo_math)
 target_include_directories(${PROJECT_NAME} PRIVATE ${MIHOYO_TEST_ROOT})
 
 # Web Configurations
@@ -45,6 +45,3 @@ if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
     target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
 endif()
-
-add_executable(test_node tutorial.cc)
-target_link_libraries(test_node raylib gridmap mihoyo_math)
