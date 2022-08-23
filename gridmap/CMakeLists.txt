@@ -8,6 +8,6 @@ add_library(gridmap STATIC
   quadtree.cc
 )
 
-target_link_libraries(gridmap PRIVATE raylib)
+target_link_libraries(gridmap PRIVATE raylib mihoyo_math)
 target_include_directories(gridmap PRIVATE ${MIHOYO_TEST_ROOT})
 message("MOHOYO_TEST_ROOT: ${MIHOYO_TEST_ROOT}")

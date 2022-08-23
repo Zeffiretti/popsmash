@@ -29,8 +29,7 @@ add_subdirectory(gridmap)
 
 # Our Project
 add_executable(${PROJECT_NAME} main.cc)
-#set(raylib_VERBOSE 1)
-target_link_libraries(${PROJECT_NAME} raylib gridmap mihoyo_math)
+target_link_libraries(${PROJECT_NAME} gridmap)
 target_include_directories(${PROJECT_NAME} PRIVATE ${MIHOYO_TEST_ROOT})
 
 # Web Configurations
