@@ -33,7 +33,7 @@ void Line::calculatePath(int width, int height, int x_margin, int y_margin) {
   path.clear();
   float x = start_x;
   float y = start_y;
-  float dt = 0.5;
+  float dt = 1.0;
   while (x >= 0 && x < width + 2 * x_margin && y >= 0 && y < height + 2 * y_margin) {
     int ix = std::round(x);
     int iy = std::round(y);

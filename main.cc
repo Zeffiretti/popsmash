@@ -1,12 +1,9 @@
 #include "gridmap/circle.h"
-#include "gridmap/grid.h"
 #include "gridmap/gridmap.h"
 #include "gridmap/line.h"
 #include "math/geometry.h"
 #include "mihoyo_macros.h"
-namespace raylib {
-#include "raylib.h"
-}
+
 #include <random>
 
 const int kWindowWidth = 1000;
@@ -17,7 +14,7 @@ int main(int argc, char** argv) {
   // generate 100 random circles with radius 5, x: [0, WINDOW_WIDTH], y: [0, WINDOW_HEIGHT]
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::uniform_int_distribution<> dis(0, kWindowWidth - 1);
+  std::uniform_int_distribution<> dis(100, 1100);
   const int num_circle = 3000;
   for (int i = 0; i < num_circle; i++) {
     int x = dis(gen);

@@ -2,13 +2,14 @@
 #define GRIDMAP_GRIDMAP
 
 #include "gridmap/circle.h"
-#include "gridmap/grid.h"
 #include "gridmap/line.h"
+#include "gridmap/quadtree.h"
 #include "mihoyo_macros.h"
 
 #include <time.h>
 #include <list>
 #include <map>
+#include <memory>
 #include <mutex>
 #include <thread>
 #include <vector>
@@ -24,9 +25,8 @@ class GridMap {
   void render();
   void addCircleToMap(int x, int y);
   void addCircleToMap(int x, int y, int r);
-  std::vector<Circle>* getActiveCircles();
-  Grid* getGrid(int x, int y) const;
   int getCircleIterator(int key);
+  void collisionDetection();
 
  private:
   int width;
@@ -34,12 +34,9 @@ class GridMap {
   int x_margin = 100;
   int y_margin = 100;
   int circle_radius;
-  int num_circle;
-  std::vector<std::vector<Grid*>> grids;
-  std::vector<Circle>* active_circles;
+  std::vector<std::shared_ptr<Circle>> active_circles;
   Line line;
-  std::map<int, int> circle_indexs;
-  int index = 0;
+  QuadTree* quad_tree_root;
 
   // parameters for rendering
   const int frame_rate = 50;
@@ -51,7 +48,6 @@ class GridMap {
   std::mutex logic_mutex;
   bool terminate = false;
 
-  void initGrids();
   void initWindow();
 };
 
