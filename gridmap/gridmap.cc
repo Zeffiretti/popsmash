@@ -40,7 +40,7 @@ void GridMap::update() {
   terminate = true;
   // terminate logic thread
   logic_thread.join();
-  raylib::CloseWindow();
+  raylib::MCloseWindow();
 }
 
 void GridMap::logic() {

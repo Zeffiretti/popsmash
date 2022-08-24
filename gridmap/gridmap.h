@@ -25,7 +25,7 @@ class GridMap {
   void render();
   void addCircleToMap(int x, int y);
   void addCircleToMap(int x, int y, int r);
-  int getCircleIterator(int key);
+  //int getCircleIterator(int key);
   void collisionDetection();
 
  private:
