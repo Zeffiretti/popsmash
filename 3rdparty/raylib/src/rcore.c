@@ -112,6 +112,8 @@
 *
 **********************************************************************************************/
 
+#pragma comment(lib, "winmm.lib ")
+
 #include "raylib.h"                 // Declares module functions
 
 // Check if config flags have been externally provided on compilation line
