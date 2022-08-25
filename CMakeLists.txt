@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.11) # FetchContent is available in 3.11+
 project(mihoyo)
 
+# ---- Include guards ----
+if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
+  message(
+    FATAL_ERROR
+      "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there."
+  )
+endif()
+
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)

@@ -1,27 +1,23 @@
-# raylib CMake Project
+# PopSmash: Find the bubbles you want to smash
 
-This provides a base project template which builds with [CMake](https://cmake.org).
+<center><img src='doc/demo.gif' align='center' style=' width:300px;height:100 px;BORDER:#007979 5px solid'/></center>
 
-## Usage
+## Build
 
-To compile the example, use one of the following dependending on your build target...
+The program has been tested with cmake on Ubuntu 20.04 and Windows 10/11 platform. The visual studio 2022 project has also been tested on Windows 10/11 platform.
 
-### Desktop
+### CMake
 
-Use the following to build for desktop:
+- On Ubuntu 20.04:
 
-``` bash
-cmake -B build
-cmake --build build
+```bash
+$ git clone https://github.com/Zeffiretti/popsmash.git
+$ cd popsmash
+$ ./scripts/build_linux.sh
 ```
 
-### Web
+- On Windows 10/11, you can run `scripts/build_win.bat`, or run cmake manually.
 
-Compiling for the web requires the [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html):
+### Visual Studio
 
-``` bash
-mkdir build
-cd build
-emcmake cmake .. -DPLATFORM=Web -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-s USE_GLFW=3" -DCMAKE_EXECUTABLE_SUFFIX=".html"
-emmake make
-```
+The VS project is provided under the `projects` directory. Open `popsmash.sln` and confirm `mihoyo` project has been set as the startup project.
