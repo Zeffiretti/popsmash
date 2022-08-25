@@ -2,5 +2,6 @@
 
 cd %~f0
 cd ..
-cmake -S .. -B ../build
-cmake --build ../build --config Release
+mkdir build
+cmake -S . -B build
+cmake --build build --config Release
