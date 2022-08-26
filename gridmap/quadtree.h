@@ -25,7 +25,7 @@ class QuadTree {
  public:
   QuadTree(int level_, Region region_);
   ~QuadTree();
-  void addCircle(std::shared_ptr<Circle> circle);
+  bool addCircle(std::shared_ptr<Circle> circle);
   void addCircleToMap(int x, int y, int r);
   void clear();
   QuadTree* getChild(int index);
@@ -52,6 +52,6 @@ class QuadTree {
   bool is_leaf = true;
 
   const int kMaxObjects = 10;
-  const int kMaxLevels = 10;
+  const int kMaxLevels = 20;
 };
 #endif /* GRIDMAP_QUADTREE */

@@ -47,10 +47,16 @@ void GridMap::logic() {
   while (!terminate) {
     if (line_changed) {
       std::lock_guard<std::mutex> lock(logic_mutex);
+      // time tick start in ms
+      auto start = std::chrono::high_resolution_clock::now();
       collisionDetection();
+      // time tick end
+      auto end = std::chrono::high_resolution_clock::now();
+      std::chrono::duration<double> diff = end - start;
+      std::cout << "collision detection time: " << 1000 * diff.count() << "ms" << std::endl;
       line_changed = false;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(500 / frame_rate));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000 / frame_rate));
   }
 }
 
@@ -92,8 +98,10 @@ void GridMap::addCircleToMap(int x, int y) { addCircleToMap(x, y, circle_radius)
 
 void GridMap::addCircleToMap(int x, int y, int r) {
   std::shared_ptr<Circle> circle = std::make_shared<Circle>(x, y, r);
-  quad_tree_root->addCircle(circle);
-  active_circles.push_back(circle);
+  bool success = quad_tree_root->addCircle(circle);
+  if (success) {
+    active_circles.push_back(circle);
+  }
 }
 
 void GridMap::initWindow() {

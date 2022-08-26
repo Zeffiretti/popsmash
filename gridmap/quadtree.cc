@@ -21,22 +21,28 @@ QuadTree::~QuadTree() {
   }
 }
 
-void QuadTree::addCircle(std::shared_ptr<Circle> circle) {
+bool QuadTree::addCircle(std::shared_ptr<Circle> circle) {
   if (is_leaf) {
     objects++;
+    for (auto& object : objects_) {
+      if (object->X() == circle->X() && object->Y() == circle->Y()) {  // the circle already exists
+        return false;
+      }
+    }
     objects_.push_back(circle);
     if (level == kMaxLevels || objects <= kMaxObjects) {
-      return;
+      return true;
     }
     split();
     objects_.clear();
     is_leaf = false;
+    return true;
   } else {
     int index = getIndex(circle->X(), circle->Y());
     if (children[index] == nullptr) {
       children[index] = new QuadTree(level + 1, getRegion(index));
     }
-    children[index]->addCircle(circle);
+    return children[index]->addCircle(circle);
   }
 }
 
